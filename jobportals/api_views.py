@@ -15,7 +15,6 @@ from django.shortcuts import get_object_or_404
 
 
 class StateViewSet(viewsets.ViewSet):
-
     def list(self, request):
         queryset = State.objects.all()
         serialize_data = StateSerializer(queryset, many=True)
@@ -314,6 +313,9 @@ class LanguageViewSet(viewsets.ViewSet):
 
 
 class WorkExperienceViewSet(viewsets.ViewSet):
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
     def list(self, request):
         queryset = WorkExperience.objects.all()

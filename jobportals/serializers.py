@@ -109,6 +109,24 @@ class WorkExperienceSerializer(serializers.ModelSerializer):
                   'company_name', 'state', 'city', 'from_month', 'from_year', 'to_year', 'to_month', 
                   'current_job', 'achievements_and_main_tasks']
 
+    def save(self, **kwargs):
+        job_title = self.validated_data['job_title']
+        job_category = self.validated_data['job_category']
+        seniority_level = self.validated_data['seniority_level']
+        company_name = self.validated_data['company_name']
+        city = self.validated_data['city']
+        current_job = self.validated_data['current_job']
+        achievements_and_main_tasks = self.validated_data['achievements_and_main_tasks']
+        jobseeker = self.context['request'].user
+
+        obj = WorkExperience.objects.create(job_title=job_title, job_category=job_category,
+        seniority_level=seniority_level, company_name=company_name, city=city, 
+        current_job=current_job, achievements_and_main_tasks=achievements_and_main_tasks,
+        jobseeker=jobseeker)
+
+        return obj
+
+
     def validate(self, data):
         dependent_cities = City.objects.filter(state=data['state'])
         if data['city'] not in dependent_cities:
